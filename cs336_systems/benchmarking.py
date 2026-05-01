@@ -21,11 +21,11 @@ def benchmark(
         seed: int = 42,
         timed_operation: Literal["forward", "forward_and_backward", "full_training_step"] = "forward",
 ):
-    model = BasicsTransformerLM(vocab_size, context_length, d_model, num_layers, num_heads, d_ff, rope_theta=rope_theta)
+    model: BasicsTransformerLM = BasicsTransformerLM(vocab_size, context_length, d_model, num_layers, num_heads, d_ff, rope_theta=rope_theta)
     model.to(device=device)
     print(f"running on {device}")
     if torch_compile:
-        model = torch.compile(model)
+        model: BasicsTransformerLM = torch.compile(model)
     torch.manual_seed(seed=seed)
     data = torch.randint(low=0, high=vocab_size, size=(batch_size, context_length+1), device=device)
     input_data = data[:, :-1]
@@ -88,7 +88,7 @@ def benchmark(
 
 
 if __name__ == "__main__":
-    device = torch.device("mps")
+    device = torch.device("cuda")
     benchmark(
         vocab_size=10_000,
         context_length=512,
